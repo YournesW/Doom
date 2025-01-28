@@ -6,27 +6,52 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JS DOOM 🕹</title>
+    <!-- Link your custom stylesheets -->
     <link rel="stylesheet" type="text/css" href="./style.css">
     <link rel="stylesheet" type="text/css" href="./styles/button.css">
+    
+    <!-- Include DosBox.js (make sure path is correct) -->
+    <script src="path/to/dosbox.js"></script>
 </head>
 
 <body>
     <div class="container">
         <div id="dosbox"></div>
-        <button class="wrapper" onclick="dosbox.requestFullScreen();">
+        <!-- Fullscreen Button -->
+        <button class="wrapper" id="fullscreenButton">
             <a><span>FULLSCREEN</span></a>
         </button>
     </div>
 
+    <!-- Your custom script -->
     <script type="text/javascript" src="./script.js"></script>
     <script type="text/javascript">
+        // Initialize DosBox
         var dosbox = new Dosbox({
             id: "dosbox",
             onload: function (dosbox) {
+                // Run Doom once DosBox is ready
                 dosbox.run("/jsdoom/roms/ultimate-doom.zip", "./UltDoom/DOOM.EXE");
             },
             onrun: function (dosbox, app) {
-                console.log("App '" + app + "' is runned");
+                console.log("App '" + app + "' is running");
+            }
+        });
+
+        // Fullscreen handling for Safari/iOS
+        var fullscreenButton = document.getElementById('fullscreenButton');
+        fullscreenButton.addEventListener('click', function () {
+            var elem = document.getElementById('dosbox');
+            
+            // Check if the browser is Safari (iOS) and use the webkit method
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen(); // For most browsers
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen(); // For Safari (iOS)
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen(); // For Firefox
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen(); // For IE/Edge
             }
         });
     </script>
